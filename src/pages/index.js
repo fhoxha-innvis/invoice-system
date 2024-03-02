@@ -1,13 +1,15 @@
-import React from 'react';
+import React from "react";
+import { Link } from "react-router-dom";
+import { Briefcase, Users } from "@heroicons/react/solid";
+import Layout from "../components/Layout";
+import Starter from "../components/Starter";
 
 const IndexPage = () => {
   return (
-    <div>
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-  </div>
-  )
-  };
+    <Layout>
+      <Starter />
+    </Layout>
+  );
+};
 
 export default IndexPage;

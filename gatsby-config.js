@@ -1,4 +1,14 @@
+const { createProxyMiddleware } = require('http-proxy-middleware');
 module.exports = {
+  developMiddleware: app => {
+    app.use(
+      '/api',
+      createProxyMiddleware({
+        target: 'http://localhost:5000', // Proxy server URL
+        changeOrigin: true,
+      })
+    )
+  },
   siteMetadata: {
     title: `Invoice System`,
     description: ``,
