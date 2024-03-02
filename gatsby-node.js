@@ -32,19 +32,19 @@ exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => 
     });
 
     // Fetch data from other API endpoints and create nodes similarly
-    Example:
-    const productResponse = await fetch('http://example.com/api/products');
-    const products = await productResponse.json();
-    products.forEach(product => {
+    // Example:
+    const invoiceResponse = await fetch('http://sad1.ivaelektronik.com:8081/api/Invoices');
+    const invoices = await invoiceResponse.json();
+    invoices.forEach(invoice => {
       createNode({
-        ...product,
-        id: createNodeId(`product-${product.id}`),
+        ...invoice,
+        id: createNodeId(`product-${invoice.id}`),
         parent: null,
         children: [],
         internal: {
-          type: 'Product',
-          content: JSON.stringify(product),
-          contentDigest: createContentDigest(product),
+          type: 'Invoice',
+          content: JSON.stringify(invoice),
+          contentDigest: createContentDigest(invoice),
         },
       });
     });
