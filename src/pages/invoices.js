@@ -1,13 +1,12 @@
 import React from "react";
-import Invoice from "../components/Invoice";
+import InvoiceView from "../components/InvoiceView";
+import Layout from "../components/Layout";
 
 const Invoices = () => {   
     return (
-        <section className="min-h-screen flex items-center">
-        <div className="container mx-auto px-6 ">
-            <Invoice />
-        </div>
-        </section>
+        <Layout>
+       <InvoiceView />
+      </Layout>
     );
     }
 export default Invoices;
