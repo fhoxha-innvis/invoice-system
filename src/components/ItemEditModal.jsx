@@ -3,23 +3,24 @@ import Modal from "react-modal";
 
 Modal.setAppElement("#___gatsby"); // Adjust this selector based on your app's root element
 
-const InvoiceEditModal = ({ invoiceId, isOpen, onRequestClose }) => {
-  console.log("InvoiceEditModal", invoiceId, isOpen, onRequestClose);
-  const [invoice, setInvoice] = useState(null);
+const ItemEditModal = ({ itemId, isOpen, onRequestClose }) => {
+  console.log("itemsEditModal", itemId, isOpen, onRequestClose);
+  const [item, setItem] = useState(null);
+  
 
   useEffect(() => {
-    if (isOpen && invoiceId) {
-      const url = `/api/invoices/${invoiceId}`;
-      console.log("Fetching invoice from:", url); // Log the URL for debugging
+    if (isOpen && itemId) {
+      const url = `/api/items/${itemId}`;
+      console.log("Fetching items from:", url); // Log the URL for debugging
       fetch(url)
         .then((res) => res.json())
         .then((data) => {
-          console.log("Invoice data:", data); // Log the data for debugging
-          setInvoice(data);
+          console.log("items data:", data); // Log the data for debugging
+          setItem(data);
         })
-        .catch((error) => console.error("Failed to load invoice", error));
+        .catch((error) => console.error("Failed to load items", error));
     }
-  }, [isOpen, invoiceId]);
+  }, [isOpen, itemId]);
 
   const handleSave = async () => {
 
@@ -33,7 +34,7 @@ const InvoiceEditModal = ({ invoiceId, isOpen, onRequestClose }) => {
     console.log("Updating invoice with stringifyed:", JSON.stringify(body));
   
     try {
-      const response = await fetch(`/api/invoices/${invoiceId}`, {
+      const response = await fetch(`/api/invoices/${itemId}`, {
         method: "PUT",
         headers: {
           'Accept': '*/*', 
@@ -59,7 +60,7 @@ const InvoiceEditModal = ({ invoiceId, isOpen, onRequestClose }) => {
   
   
 
-  if (!invoice) return null;
+  if (!item) return null;
 
   return (
     <Modal
@@ -69,52 +70,52 @@ const InvoiceEditModal = ({ invoiceId, isOpen, onRequestClose }) => {
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto"
     >
       <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full p-5">
-        <h2 className="text-xl font-semibold mb-4">Edit Invoice</h2>
+        <h2 className="text-xl font-semibold mb-4">Edit Item</h2>
         <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
           <div className="flex flex-col">
-            <label className="text-gray-600 font-medium">Invoice Number:</label>
+            <label className="text-gray-600 font-medium">Item Name:</label>
             <input
               type="text"
-              value={invoice.invoiceNumber}
+              value={item.name}
               onChange={(e) =>
-                setInvoice({ ...invoice, invoiceNumber: e.target.value })
+                setItem({ ...item, name: e.target.value })
               }
               className="mt-1 p-2 border border-gray-300 rounded"
             />
           </div>
           <div className="flex flex-col">
-            <label className="text-gray-600 font-medium">Invoice Date:</label>
+            <label className="text-gray-600 font-medium">Item Code:</label>
             <input
               type="text"
-              value={invoice.invoiceDate}
+              value={item.code}
               onChange={(e) =>
-                setInvoice({ ...invoice, invoiceDate: e.target.value })
-              }
-              className="mt-1 p-2 border border-gray-300 rounded"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="text-gray-600 font-medium">
-              Invoice Total Amount:
-            </label>
-            <input
-              type="text"
-              value={invoice.totalAmount}
-              onChange={(e) =>
-                setInvoice({ ...invoice, totalAmount: e.target.value })
+                setItem({ ...item, code: e.target.value })
               }
               className="mt-1 p-2 border border-gray-300 rounded"
             />
           </div>
           <div className="flex flex-col">
             <label className="text-gray-600 font-medium">
-              Invoice Status:
+              Item Description:
             </label>
             <input
               type="text"
-              value={invoice.isPaid}
+              value={item.description}
               onChange={(e) =>
-                setInvoice({ ...invoice, isPaid: e.target.value })
+                setItem({ ...item, description: e.target.value })
+              }
+              className="mt-1 p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-gray-600 font-medium">
+              Item Price:
+            </label>
+            <input
+              type="text"
+              value={item.price}
+              onChange={(e) =>
+                setItem({ ...item, price: e.target.value })
               }
               className="mt-1 p-2 border border-gray-300 rounded"
             />
@@ -141,4 +142,4 @@ const InvoiceEditModal = ({ invoiceId, isOpen, onRequestClose }) => {
   );
 };
 
-export default InvoiceEditModal;
+export default ItemEditModal;
