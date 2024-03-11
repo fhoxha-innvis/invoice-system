@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import InvoiceEditModal from "./InvoiceEditModal";
-import CustomerEditModal from "./CustomerEditModal"; 
+import CustomerEditModal from "../customers/CustomerEditModal"; 
 
 const InvoiceView = () => {
   const [invoices, setInvoices] = useState([]);

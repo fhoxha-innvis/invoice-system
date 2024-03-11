@@ -1,6 +1,6 @@
 import React from "react";
-import Layout from "../components/Layout";
-import ItemsComponent from "../components/ItemsView";
+import Layout from "../components/layout/Layout";
+import ItemsComponent from "../components/items/ItemsView";
 
 const Items = () => {
   return (

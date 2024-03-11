@@ -1,6 +1,6 @@
 import React from "react";
-import InvoiceView from "../components/InvoiceView";
-import Layout from "../components/Layout";
+import InvoiceView from "../components/invoices/InvoiceView";
+import Layout from "../components/layout/Layout";
 
 const Invoices = () => {   
     return (
