@@ -7,7 +7,6 @@ const PORT = 5000; // Feel free to use any available port
 app.use(cors());
 app.use(express.json());
 
-
 //INVOICES
 app.get("/api/invoices", async (req, res) => {
   try {
@@ -45,7 +44,6 @@ app.post("/api/invoices", async (req, res) => {
   }
 });
 app.put("/api/invoices/:invoiceId", async (req, res) => {
-
   console.log("req.params", req.params);
   console.log("req.body", req.body);
   const { invoiceId } = req.params;
@@ -90,7 +88,6 @@ app.get("/api/invoices/:invoiceId", async (req, res) => {
   }
 });
 
-
 //ITEMS
 app.get("/api/items", async (req, res) => {
   try {
@@ -121,6 +118,95 @@ app.get("/api/items/:itemsId", async (req, res) => {
     res.status(500).json({ message: "Failed to fetch invoice details" });
   }
 });
+
+// CUSTOMERS
+app.get("/api/customers", async (req, res) => {
+  try {
+    const response = await fetch(
+      "http://sad1.ivaelektronik.com:8081/api/Customers"
+    );
+    if (!response.ok) throw new Error("Failed to fetch data");
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error("Error fetching customers:", error);
+    res.status(500).json({ message: "Failed to fetch customers" });
+  }
+});
+
+app.post("/api/customers", async (req, res) => {
+  try {
+    const customerData = req.body;
+    const response = await fetch(
+      "http://sad1.ivaelektronik.com:8081/api/Customers",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(customerData),
+      }
+    );
+
+    if (!response.ok) throw new Error("Failed to post customer");
+    const data = await response.json();
+    res.status(201).json(data);
+  } catch (error) {
+    console.error("Error posting customer:", error);
+    res.status(500).json({ message: "Failed to post customer" });
+  }
+});
+
+app.put("/api/customers/:customerId", async (req, res) => {
+  const { customerId } = req.params;
+  const customerData = req.body;
+
+  try {
+    const response = await fetch(
+      `http://sad1.ivaelektronik.com:8081/api/Customers/${customerId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(customerData),
+      }
+    );
+
+    if (!response.ok)
+      throw new Error(`Failed to update customer ${customerId}`);
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error(`Error updating customer ${customerId}:`, error);
+    res
+      .status(500)
+      .json({ message: `Failed to update customer ${customerId}` });
+  }
+});
+
+app.delete("/api/customers/:customerId", async (req, res) => {
+  const { customerId } = req.params;
+
+  try {
+    const response = await fetch(
+      `http://sad1.ivaelektronik.com:8081/api/Customers/${customerId}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok)
+      throw new Error(`Failed to delete customer ${customerId}`);
+    res.status(204).send(); // 204 No Content
+  } catch (error) {
+    console.error(`Error deleting customer ${customerId}:`, error);
+    res
+      .status(500)
+      .json({ message: `Failed to delete customer ${customerId}` });
+  }
+});
+
 app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)
 );

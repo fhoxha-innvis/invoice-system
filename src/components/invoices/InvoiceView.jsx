@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import InvoiceEditModal from "./InvoiceEditModal";
-import CustomerEditModal from "../customers/CustomerEditModal"; 
+import CustomerAddModal from "../customers/CustomerAddModal"; 
 
 const InvoiceView = () => {
   const [invoices, setInvoices] = useState([]);
@@ -23,7 +23,7 @@ const InvoiceView = () => {
     setIsModalOpen(true);
   };
   const handleAddCustomer = () => {
-    setIsCustomerModalOpen(true); // Open the CustomerEditModal
+    setIsCustomerModalOpen(true); // Open the CustomerAddModal
   };
 
   const refreshCustomers = () => {
@@ -88,7 +88,7 @@ const InvoiceView = () => {
                   {new Date(invoice.invoiceDate).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  Customer Name{/* Placeholder for customer name */}
+                  {invoice.customerId}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   ${invoice.totalAmount.toFixed(2)}
@@ -119,7 +119,7 @@ const InvoiceView = () => {
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
       />
-      <CustomerEditModal isOpen={isCustomerModalOpen} onRequestClose={() => setIsCustomerModalOpen(false)} refreshCustomers={refreshCustomers} />
+      <CustomerAddModal isOpen={isCustomerModalOpen} onRequestClose={() => setIsCustomerModalOpen(false)} refreshCustomers={refreshCustomers} />
     </div>
   );
 };

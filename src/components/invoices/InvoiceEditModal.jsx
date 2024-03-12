@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 
-Modal.setAppElement("#___gatsby"); // Adjust this selector based on your app's root element
-
 const InvoiceEditModal = ({ invoiceId, isOpen, onRequestClose }) => {
-  console.log("InvoiceEditModal", invoiceId, isOpen, onRequestClose);
+
   const [invoice, setInvoice] = useState(null);
 
   useEffect(() => {
     if (isOpen && invoiceId) {
       const url = `/api/invoices/${invoiceId}`;
-      console.log("Fetching invoice from:", url); // Log the URL for debugging
+      console.log("Fetching invoice from:", url); 
       fetch(url)
         .then((res) => res.json())
         .then((data) => {
-          console.log("Invoice data:", data); // Log the data for debugging
           setInvoice(data);
         })
         .catch((error) => console.error("Failed to load invoice", error));
@@ -22,42 +19,36 @@ const InvoiceEditModal = ({ invoiceId, isOpen, onRequestClose }) => {
   }, [isOpen, invoiceId]);
 
   const handleSave = async () => {
-
     const body = {
       invoiceDate: invoice.invoiceDate,
       invoiceNumber: invoice.invoiceNumber,
       totalAmount: invoice.totalAmount,
       isPaid: invoice.isPaid,
-    }
-    console.log("Updating invoice with:", body);
-    console.log("Updating invoice with stringifyed:", JSON.stringify(body));
-  
+    };
+
     try {
       const response = await fetch(`/api/invoices/${invoiceId}`, {
         method: "PUT",
         headers: {
-          'Accept': '*/*', 
-          'Content-Type': 'application/json'
+          Accept: "*/*",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
       });
-      
-  
+
       if (!response.ok) {
-        throw new Error(`Network response was not ok, status: ${response.status}`);
+        throw new Error(
+          `Network response was not ok, status: ${response.status}`
+        );
       }
-  
+
       const data = await response.json();
       console.log("Invoice updated:", data);
-      onRequestClose(); // Close the modal after a successful update
+      onRequestClose();
     } catch (error) {
       console.error("Failed to update invoice", error);
-      // Optionally, inform the user of the failure
     }
   };
-  
-  
-  
 
   if (!invoice) return null;
 
@@ -107,9 +98,7 @@ const InvoiceEditModal = ({ invoiceId, isOpen, onRequestClose }) => {
             />
           </div>
           <div className="flex flex-col">
-            <label className="text-gray-600 font-medium">
-              Invoice Status:
-            </label>
+            <label className="text-gray-600 font-medium">Invoice Status:</label>
             <input
               type="text"
               value={invoice.isPaid}
