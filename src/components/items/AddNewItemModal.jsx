@@ -4,41 +4,38 @@ import Modal from "react-modal";
 Modal.setAppElement("#___gatsby");
 
 const AddNewItemModal = ({ isOpen, onRequestClose }) => {
+
   const [item, setItem] = useState({
     name: "",
     code: "",
     description: "",
-    price: "",
+    price: ""
   });
 
   const handleSave = async () => {
-    try {
-      const response = await fetch("/api/items", {
-        method: "POST",
-        headers: {
-          "Accept": "*/*",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(item),
-      });
+    const response = await fetch("/api/items", {
+      method: "POST",
+      headers: {
+        "Accept": "*/*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(item),
+    });
 
-      if (!response.ok) {
-        throw new Error(`Network response was not ok, status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("Item created:", data);
-      onRequestClose(true); // Argument indicates refresh needed
-    } catch (error) {
-      console.error("Failed to create item", error);
+    if (!response.ok) {
+      
+      console.error(`Failed to create item, status: ${response.status}`);
+      return;
     }
+
+    onRequestClose(true); 
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setItem((prevItem) => ({
+    setItem(prevItem => ({
       ...prevItem,
-      [name]: value,
+      [name]: value
     }));
   };
 
@@ -48,13 +45,58 @@ const AddNewItemModal = ({ isOpen, onRequestClose }) => {
     <Modal
       isOpen={isOpen}
       onRequestClose={() => onRequestClose(false)}
-      className="flex items-center justify-center min-h-screen outline-none overflow-x-hidden overflow-y-auto"
-      overlayClassName="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto"
+      className="m-4 md:m-auto md:max-w-lg outline-none overflow-x-hidden"
+      overlayClassName="fixed inset-0 bg-black bg-opacity-75 overflow-y-auto"
     >
-      <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full p-5">
-        <h2 className="text-xl font-semibold mb-4">Add New Item</h2>
-        {/* Form similar to ItemEditModal but for adding new items */}
-        {/* The rest of your form goes here, similar structure to ItemEditModal */}
+      <div className="bg-white rounded-lg shadow-xl p-5">
+        <h2 className="text-2xl font-semibold mb-4">Add New Item</h2>
+        <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+          <input
+            className="w-full px-3 py-2 border border-gray-300 rounded"
+            name="name"
+            placeholder="Name"
+            value={item.name}
+            onChange={handleChange}
+          />
+          <input
+            className="w-full px-3 py-2 border border-gray-300 rounded"
+            name="code"
+            placeholder="Code"
+            value={item.code}
+            onChange={handleChange}
+          />
+          <textarea
+            className="w-full px-3 py-2 border border-gray-300 rounded"
+            name="description"
+            placeholder="Description"
+            value={item.description}
+            onChange={handleChange}
+          />
+          <input
+            className="w-full px-3 py-2 border border-gray-300 rounded"
+            name="price"
+            placeholder="Price"
+            type="number"
+            value={item.price}
+            onChange={handleChange}
+          />
+          <div className="flex justify-end space-x-2">
+            <button
+              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+              type="button"
+              onClick={() => onRequestClose(false)}
+            >
+              Cancel
+            </button>
+            <button
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              type="button"
+              onClick={handleSave}
+            >
+              Save
+            </button>
+          </div>
+        </form>
       </div>
     </Modal>
   );

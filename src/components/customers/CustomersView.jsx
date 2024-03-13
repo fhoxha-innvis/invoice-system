@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import CustomerEditModal from './CustomerEditModal';
-import CustomerDeleteModal from './CustomerDeleteModal';
+import React, { useState, useEffect } from "react";
+import CustomerEditModal from "./CustomerEditModal";
+import CustomerDeleteModal from "./CustomerDeleteModal";
 
 const CustomerListView = () => {
   const [customers, setCustomers] = useState([]);
@@ -12,9 +12,9 @@ const CustomerListView = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await fetch('/api/customers');
+        const response = await fetch("/api/customers");
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         const data = await response.json();
         setCustomers(data);
@@ -32,6 +32,7 @@ const CustomerListView = () => {
   };
 
   const handleDelete = (customer) => {
+    console.log("I AM PASSING THIS ID TO THE MODALS", customer)
     setSelectedCustomer(customer);
     setIsDeleteModalOpen(true);
   };
@@ -93,13 +94,27 @@ const CustomerListView = () => {
           <tbody className="bg-white divide-y divide-gray-200">
             {customers.map((customer) => (
               <tr key={customer.id}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{customer.name}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.email}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.phone}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.address}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.city}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.postalCode}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.country}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {customer.name}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {customer.email}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {customer.phone}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {customer.address}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {customer.city}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {customer.postalCode}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {customer.country}
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button
                     onClick={() => handleEdit(customer.id)}
@@ -119,10 +134,10 @@ const CustomerListView = () => {
           </tbody>
         </table>
       </div>
-      
+
       {isEditModalOpen && (
         <CustomerEditModal
-          customeId={selectedCustomer}
+          customerId={selectedCustomer} 
           isOpen={isEditModalOpen}
           onRequestClose={() => setIsEditModalOpen(false)}
         />
@@ -130,11 +145,10 @@ const CustomerListView = () => {
 
       {isDeleteModalOpen && (
         <CustomerDeleteModal
-          customerId={selectedCustomer}
+          customerData={selectedCustomer}
           isOpen={isDeleteModalOpen}
           onRequestClose={() => setIsDeleteModalOpen(false)}
-          onDeleteSuccess={() => {
-          }}
+          onDeleteSuccess={() => {}}
         />
       )}
     </div>

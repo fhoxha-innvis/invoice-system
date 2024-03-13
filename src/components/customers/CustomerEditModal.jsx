@@ -2,20 +2,23 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 
 const CustomerEditModal = ({ customerId, isOpen, onRequestClose }) => {
+
+  console.log("THIA IS THE CUSTOMER ID", customerId)
   const [customer, setCustomer] = useState(null);
 
   useEffect(() => {
     if (isOpen && customerId) {
-      const url = `/api/customer/${customerId}`;
-      console.log("Fetching invoice from:", url);
+      const url = `/api/customers/${customerId}`; 
+      console.log("Fetching customer details from:", url);
       fetch(url)
         .then((res) => res.json())
         .then((data) => {
             setCustomer(data);
         })
-        .catch((error) => console.error("Failed to load invoice", error));
+        .catch((error) => console.error("Failed to load customer details", error));
     }
-  }, [isOpen, customerId]);
+}, [isOpen, customerId]);
+
 
 
   const handleSave = async () => {

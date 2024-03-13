@@ -2,8 +2,7 @@ const express = require("express");
 const fetch = require("node-fetch");
 const cors = require("cors");
 const app = express();
-const PORT = 5000; // Feel free to use any available port
-
+const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 
@@ -105,8 +104,7 @@ app.get("/api/items", async (req, res) => {
 
 app.get("/api/items/:itemsId", async (req, res) => {
   try {
-    // Accessing invoiceId from the route parameter
-    const { invoiceId } = req.params;
+    const { itemsId } = req.params;
     const response = await fetch(
       `http://sad1.ivaelektronik.com:8081/api/Items/${itemsId}`
     );
@@ -118,6 +116,49 @@ app.get("/api/items/:itemsId", async (req, res) => {
     res.status(500).json({ message: "Failed to fetch invoice details" });
   }
 });
+
+app.post("/api/items", async (req, res) => {
+  try {
+    const itemDetails = req.body;
+    const response = await fetch("http://sad1.ivaelektronik.com:8081/api/Items", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(itemDetails),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to create item, status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    res.status(201).json(data); 
+  } catch (error) {
+    console.error("Error creating item:", error);
+    res.status(500).json({ message: "Failed to create item" });
+  }
+});
+app.delete("/api/items/:itemId", async (req, res) => {
+  const { itemId } = req.params;
+
+  try {
+    const response = await fetch(`http://sad1.ivaelektronik.com:8081/api/Items/${itemId}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete the item');
+    }
+
+    console.log(`Item ${itemId} deleted`);
+    res.status(204).send(); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to delete the item' });
+  }
+});
+
 
 // CUSTOMERS
 app.get("/api/customers", async (req, res) => {
