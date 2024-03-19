@@ -128,6 +128,8 @@ app.post("/api/items", async (req, res) => {
       body: JSON.stringify(itemDetails),
     });
 
+    console.log("This is the response from items:", response)
+
     if (!response.ok) {
       throw new Error(`Failed to create item, status: ${response.status}`);
     }
